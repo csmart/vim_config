@@ -54,7 +54,7 @@ if [[ ! "$(fc-list |grep -i hack)" ]]; then
 	cd "${HOME}/.fonts/"
 	echo "Downloading Hack font"
 	wget -q https://github.com/chrissimpkins/Hack/releases/download/\
-v2.019/Hack-v2_019-otf.zip -O hack.zip
+v2.020/Hack-v2_020-otf.zip -O hack.zip
 	unzip -qu hack.zip && rm -f hack.zip
 	cd - >/dev/null
 	# Update fonts
@@ -62,13 +62,13 @@ v2.019/Hack-v2_019-otf.zip -O hack.zip
 fi
 
 # Install all the bundles specified in .vimrc
-vim +BundleInstall +qall
+vim +PluginInstall +qall
 
 # Advise user of overrides
 cat << EOF
 All done!
 
-You can put custom settings in ~/.vimrc_overrides, e.g. run:
-echo setlocal spell spelllang=en_au >> ~/.vimrc_overrides
+You can put custom settings in ~/.vimrc.local, e.g. run:
+echo setlocal spell spelllang=en_au >> ~/.vimrc.local
 
 EOF

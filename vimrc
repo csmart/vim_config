@@ -1,28 +1,30 @@
 set nocompatible
 filetype off
 
+" set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
+call vundle#begin()
 
 " let Vundle manage Vundle
 " required! 
-Bundle 'gmarik/vundle'
-Bundle 'vim-airline/vim-airline'
-Bundle 'vim-airline/vim-airline-themes'
-Bundle 'tpope/vim-fugitive'
-Bundle 'scrooloose/nerdtree'
-Bundle 'klen/python-mode'
-Bundle 'davidhalter/jedi-vim'
-Bundle 'chase/vim-ansible-yaml'
-Bundle 'altercation/vim-colors-solarized'
-Bundle 'majutsushi/tagbar'
-Bundle 'airblade/vim-gitgutter'
-Bundle 'ctrlpvim/ctrlp.vim'
-Bundle 'christoomey/vim-tmux-navigator'
+Plugin 'gmarik/vundle'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+Plugin 'tpope/vim-fugitive'
+Plugin 'scrooloose/nerdtree'
+Plugin 'klen/python-mode'
+Plugin 'davidhalter/jedi-vim'
+Plugin 'chase/vim-ansible-yaml'
+Plugin 'altercation/vim-colors-solarized'
+Plugin 'majutsushi/tagbar'
+Plugin 'airblade/vim-gitgutter'
+Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'christoomey/vim-tmux-navigator'
+Plugin 'rust-lang/rust.vim'
 
-" The bundles you install will be listed here
-
-filetype plugin indent on
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
 
 " The rest of your config follows here
 
@@ -134,5 +136,5 @@ let g:pymode_folding = 0
 
 " Finally, load any overrides from the local box
 " (silent in case it doesn't exist)
-silent! source ~/.vimrc_overrides
+silent! source ~/.vimrc.local
 

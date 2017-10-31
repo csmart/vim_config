@@ -1,0 +1,13 @@
+" Example for custom vundles
+" Put your own vundles here and copy to ~/.vimrc.local.vundles
+" Run ./setup.sh
+
+" Provides rust syntax used by YCM and syntastic
+Plugin 'rust-lang/rust.vim'
+
+" Note, YCM will compile various tools and libs itself
+" for language support, e.g. rust
+" See:
+" https://github.com/Valloric/YouCompleteMe#fedora-linux-x64
+Plugin 'valloric/YouCompleteMe'
+"

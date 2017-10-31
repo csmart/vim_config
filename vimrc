@@ -6,38 +6,58 @@ endif
 set nocompatible
 filetype off
 
+" set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
+call vundle#begin()
 
 " let Vundle manage Vundle
-" required! 
-Bundle 'gmarik/vundle'
-Bundle 'vim-airline/vim-airline'
-Bundle 'vim-airline/vim-airline-themes'
-Bundle 'tpope/vim-fugitive'
-Bundle 'scrooloose/nerdtree'
-Bundle 'klen/python-mode'
-Bundle 'davidhalter/jedi-vim'
-Bundle 'chase/vim-ansible-yaml'
-Bundle 'altercation/vim-colors-solarized'
-Bundle 'majutsushi/tagbar'
-Bundle 'airblade/vim-gitgutter'
-Bundle 'ctrlpvim/ctrlp.vim'
-Bundle 'christoomey/vim-tmux-navigator'
+" required!
+Plugin 'gmarik/vundle'
 
-" The bundles you install will be listed here
+" Navigation
+Plugin 'scrooloose/nerdtree' "File system explorer for the Vim editor
+Plugin 'ctrlpvim/ctrlp.vim' "Fuzzy file, buffer, mru, tag, etc finder
+Plugin 'christoomey/vim-tmux-navigator' "Seamless navigation between tmux panes and vim splits
 
-filetype plugin indent on
+" Language related
+Plugin 'klen/python-mode' "Helps you to create python code very quickly
+Plugin 'davidhalter/jedi-vim' "Python autocompletion with VIM
+Plugin 'majutsushi/tagbar' "Displays tags in a window, ordered by scope
+Plugin 'mzlogin/vim-markdown-toc' "Generate markdown TOC
+Plugin 'avakhov/vim-yaml' "Dumb-smart indentation for Yaml
+" If file type not detected:
+" :set ft=ansible
+" Or set something like this in ~/.vimrc.local
+" au BufRead,BufNewFile */playbooks/*.yml set filetype=ansible
+Plugin 'pearofducks/ansible-vim' "Syntax highlighting Ansible's common filetypes
+Plugin 'vim-syntastic/syntastic' " Syntax checking hacks for vim
+
+" Beautify Vim
+Plugin 'altercation/vim-colors-solarized' "Precision colorscheme for the vim text editor
+Plugin 'vim-airline/vim-airline' "Lean & mean status/tabline for vim that's light as air
+Plugin 'vim-airline/vim-airline-themes' "Themes for airline
+
+" Git related
+Plugin 'tpope/vim-fugitive' "The best Git wrapper of all time
+Plugin 'airblade/vim-gitgutter' "shows a git diff in the gutter (sign column)
+Plugin 'Xuyuanp/nerdtree-git-plugin' "NERDTree showing git status flags
+
+" Load any custom vundles
+silent! source ~/.vimrc.local.vundles
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
 
 " The rest of your config follows here
 
 syntax enable
 set incsearch
 set hlsearch
-set sw=2
-set ts=2
+set sw=4
+set ts=4
 set expandtab
-"set textwidth=79
+set textwidth=79
 
 " Set cursor crosshairs (column, line)
 "set cuc
@@ -47,8 +67,8 @@ set cul
 set hidden
 
 " Set list to show white space
-"set list
-"set listchars=tab:»·,trail:§,extends:¬,precedes:«,nbsp:§
+set list
+set listchars=tab:»·,trail:§,extends:¬,precedes:«,nbsp:§
 
 " If your running OSX and backspace doesn't behave correctly uncomment this
 " following line
@@ -62,11 +82,11 @@ set laststatus=2
 
 " (optional) If everything is too bright and high contrast, then uncomment
 " the next 2 lines:
+" loading the solarized colorscheme is silent to prevent error during initial install
+silent! colorscheme solarized
 "set term=screen-256color
 "let g:solarized_termcolors=256
 set background=dark
-" loading the solarized colorscheme is silent to prevent error during initial install
-silent! colorscheme solarized
 
 augroup vimrc_autocmds
     autocmd!
@@ -84,7 +104,10 @@ augroup vimrc_autocmds
 "let g:tagbar_ctags_bin="/usr/local/Cellar/ctags/5.8_1/bin/ctags"
 
 " Nerdtree setup
-map <F2> :NERDTreeToggle<CR>
+map <C-n> :NERDTreeToggle<CR>
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " Airline Setup
 "  smarter tab line
@@ -139,5 +162,8 @@ let g:pymode_folding = 0
 
 " Finally, load any overrides from the local box
 " (silent in case it doesn't exist)
+" The old location for the file
 silent! source ~/.vimrc_overrides
+" New location
+silent! source ~/.vimrc.local
 

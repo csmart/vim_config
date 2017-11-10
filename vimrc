@@ -36,6 +36,7 @@ Plugin 'vim-syntastic/syntastic' " Syntax checking hacks for vim
 Plugin 'altercation/vim-colors-solarized' "Precision colorscheme for the vim text editor
 Plugin 'vim-airline/vim-airline' "Lean & mean status/tabline for vim that's light as air
 Plugin 'vim-airline/vim-airline-themes' "Themes for airline
+Plugin 'wincent/terminus' " Better terminal integration
 
 " Git related
 Plugin 'tpope/vim-fugitive' "The best Git wrapper of all time
@@ -60,24 +61,22 @@ set expandtab
 set textwidth=79
 
 " Set cursor crosshairs (column, line)
-"set cuc
 set cul
+"set cuc
 
 " Hide buffers instead of closing them
 set hidden
 
-" Set list to show white space
+" Show tabs and trailing spaces (large black square U+2B1B)
+set listchars=tab:»·,trail:·
 set list
-set listchars=tab:»·,trail:§,extends:¬,precedes:«,nbsp:§
-
-" If your running OSX and backspace doesn't behave correctly uncomment this
-" following line
-"set backspace=indent,eol,start
+highlight NonText guifg=#4a4a59
+highlight SpecialKey guifg=#4a4a59
 
 " Font Hack as the default font
 set guifont=Hack\ 9
 set laststatus=2
-"
+
 " Set solarized colour scheme
 
 " (optional) If everything is too bright and high contrast, then uncomment
@@ -96,12 +95,41 @@ augroup vimrc_autocmds
     autocmd FileType python set nowrap
     augroup END
 
+" vim setup
+" shortcuts for buffers
+nnoremap <C-b> :buffers<CR>:buffer<Space>
+nnoremap bn :bnext<CR>
+nnoremap bp :bprevious<CR>
+nnoremap bc :bdelete<CR>
+nnoremap bC :bdelete!<CR>
+" shortcuts for tabs
+nnoremap tn :tabnext<CR>
+nnoremap tp :tabprevious<CR>
+
+" terminus setup
+let g:TerminusFocusReporting=0
+
+" ctrlp setup
+let g:ctrlp_working_path_mode = 'r'
+let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
+let g:ctrlp_prompt_mappings = {
+    \ 'AcceptSelection("e")': ['<c-x>'],
+    \ 'AcceptSelection("t")': ['<cr>', '<2-LeftMouse>'],
+    \ }
+" Setup some default ignores
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\v[\/](\.(git|hg|svn)|\_site)$',
+  \ 'file': '\v\.(exe|so|dll|class|png|jpg|jpeg)$',
+\}
+
+let g:ctrlp_cmd = 'CtrlPMRU'
+
 " Tagbar setup
-" NOTE: you need ctags installed, so will keep this commented out for now
-"nmap <F9> :TagbarToggle<CR>
+" NOTE: you need ctags installed
 " (Optional) If you are on OSX or have ctags (non-BSD) installed somewhere else not in
 " your path, use to following line to point to it.
 "let g:tagbar_ctags_bin="/usr/local/Cellar/ctags/5.8_1/bin/ctags"
+nmap <F9> :TagbarToggle<CR>
 
 " Nerdtree setup
 map <C-n> :NERDTreeToggle<CR>
@@ -109,13 +137,19 @@ autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
+" Ansible setup
+" treat all .yml files as ansible, cause they probably are
+au BufRead,BufNewFile *.yml set filetype=ansible
+
 " Airline Setup
-"  smarter tab line
-"let g:airline#extensions#tabline#enabled = 1
-"
+" Enable the list of buffers
+let g:airline#extensions#tabline#enabled = 1
+" Show just the filename
+let g:airline#extensions#tabline#fnamemod = ':t'
 "  Separators can be configured independently for the tabline
-"let g:airline#extensions#tabline#left_sep = ' '
-"let g:airline#extensions#tabline#left_alt_sep = '|'
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
+let g:airline#extensions#tabline#enabled = 1
 
 " Python-mode
 " Activate rope

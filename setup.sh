@@ -9,7 +9,6 @@ fi
 DEPS=""
 type git &>/dev/null || DEPS="  git\n"
 type vim &>/dev/null || DEPS+="  vim\n"
-type wget &>/dev/null || DEPS+="  wget\n"
 
 if [[ -n "${DEPS}" ]] ; then
 	echo "Please install missing dependencies:"
@@ -30,18 +29,18 @@ finish() {
 trap finish EXIT
 
 # Directory containing the script, so that we can copy other files out
-#DIR="$(dirname "$(readlink -f "${0}")")" # not supported on OSX
-DIR="$( cd "$( dirname "${0}" )" && pwd )"
+DIR="$(dirname "$(readlink -f "${0}")")"
 
 # Get Vundle, the vim bundler
 mkdir -p "${HOME}/.vim/bundle/"
 if [[ -d "${HOME}/.vim/bundle/vundle/.git" ]]; then
 	( cd "${HOME}/.vim/bundle/vundle"
-	echo "Pulling vundle updates from GitHub"
-	git pull origin master &>/dev/null
+	echo "Pulling vundle updates from GitLab"
+	git remote update &>/dev/null
+	git reset --hard origin/master &>/dev/null
 	cd - >/dev/null )
 else
-	echo "Cloning vundle from GitHub"
+	echo "Cloning vundle from GitLab"
 	git clone https://github.com/gmarik/vundle.git "${HOME}/.vim/bundle/vundle" &>/dev/null
 fi
 
@@ -49,35 +48,13 @@ fi
 echo "Installing vimrc config"
 cp "${DIR}/vimrc" "${HOME}/.vimrc"
 
-# Grab hack font if it doesn't exist
-if [[ ! "$(fc-list |grep Hack-)" ]]; then
-	( mkdir -p "${HOME}/.fonts/"
-	cd "${HOME}/.fonts/"
-	echo "Downloading Hack font"
-	wget -q https://github.com/source-foundry/Hack/releases/download\
-/v3.000/Hack-v3.000-ttf.zip \
--O hack.zip
-	unzip -qu hack.zip && rm -f hack.zip
-	cd - >/dev/null
-	# Update fonts
-	fc-cache -f "${HOME}/.fonts" )
-fi
-
 # Install all the bundles specified in .vimrc
 vim +PluginInstall +qall
-
-# Vim detects mutt emails (with filetype plugin on) so set wrapping
-mkdir -p ~/.vim/ftplugin
-cat > ~/.vim/ftplugin/mail.vim << EOF
-setl tw=62
-setl fo+=aw
-EOF
 
 # Advise user of overrides
 cat << EOF
 All done!
 
-You can put custom settings in ~/.vimrc.local, e.g. run:
-echo setlocal spell spelllang=en_au >> ~/.vimrc.local
+You can put custom settings in ~/.vimrc.local
 
 EOF

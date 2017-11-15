@@ -30,7 +30,7 @@ Plugin 'avakhov/vim-yaml' "Dumb-smart indentation for Yaml
 " Or set something like this in ~/.vimrc.local
 " au BufRead,BufNewFile */playbooks/*.yml set filetype=ansible
 Plugin 'pearofducks/ansible-vim' "Syntax highlighting Ansible's common filetypes
-Plugin 'vim-syntastic/syntastic' " Syntax checking hacks for vim
+Plugin 'vim-syntastic/syntastic' "Syntax checking hacks for vim
 
 " Beautify Vim
 Plugin 'altercation/vim-colors-solarized' "Precision colorscheme for the vim text editor
@@ -140,6 +140,17 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 " Ansible setup
 " treat all .yml files as ansible, cause they probably are
 au BufRead,BufNewFile *.yml set filetype=ansible
+
+" Syntastic setup
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+let g:syntastic_python_checkers = ['flake8', 'pyflakes', 'pylint']
 
 " Airline Setup
 " Enable the list of buffers

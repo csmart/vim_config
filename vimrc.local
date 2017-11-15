@@ -3,33 +3,21 @@
 " 2) Set your custom settings
 " 3) Run ./setup.sh
 
+" Examples:
+
 " Linux style guide
-set tabstop=8
-set softtabstop=8
-set shiftwidth=8
-set noexpandtab
+"set tabstop=8
+"set softtabstop=8
+"set shiftwidth=8
+"set noexpandtab
 
 " macro for println
-function! InsertMarker()
-	let string = "printf(\":::::::::: %s:%d:%s() - \\n\", FILE, LINE, func);"
-	call append(line('.'), string)
-endfunction
+"function! InsertMarker()
+"	let string = "printf(\":::::::::: %s:%d:%s() - \\n\", FILE, LINE, func);"
+"	call append(line('.'), string)
+"endfunction
 
 " mm keys execute the marker
-command Marker call InsertMarker()
-map mm :Marker<enter>
-
-" Syntastic
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-let g:syntastic_python_checkers = ['flake8', 'pyflakes', 'pylint']
-
-nmap <C-@><C-@> :cs find s <C-R>=expand("<cword>")<CR><CR>
-set textwidth=79
+"command Marker call InsertMarker()
+"map mm :Marker<enter>
 

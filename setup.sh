@@ -49,9 +49,11 @@ echo "Installing vimrc config"
 cp "${DIR}/vimrc" "${HOME}/.vimrc"
 
 # Copy the example local files if not already existing
-[[ ! -e "${HOME}/.vimrc.local" ]] && cp "${DIR}/vimrc.local" "${HOME}/.vimrc.local"
-[[ ! -e "${HOME}/.vimrc.local.vundles" ]] && cp "${DIR}/vimrc.local.vundles" \
-"${HOME}/.vimrc.local.vundles"
+for config in vimrc.local vimrc.local.vundles vimrc.local.vundles.disable; do
+	if [[ ! -e "${HOME}/.${config}" ]]; then
+		cp "${DIR}/${config}" "${HOME}/.${config}"
+	fi
+done
 
 # Install all the bundles specified in .vimrc
 vim +PluginInstall +qall
@@ -60,7 +62,8 @@ vim +PluginInstall +qall
 cat << EOF
 All done!
 
-You can put custom settings in ~/.vimrc.local
-Add your own vim bundles to ~/.vimrc.local.vundles
+* You can put custom settings in ~/.vimrc.local
+* Add your own vim bundles to ~/.vimrc.local.vundles
+* Disable vim bundles with ~/.vimrc.local.vundles.disable
 
 EOF

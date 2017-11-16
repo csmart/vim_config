@@ -17,18 +17,16 @@ Plugin 'gmarik/vundle'
 " Navigation
 Plugin 'scrooloose/nerdtree' "File system explorer for the Vim editor
 Plugin 'ctrlpvim/ctrlp.vim' "Fuzzy file, buffer, mru, tag, etc finder
-Plugin 'christoomey/vim-tmux-navigator' "Seamless navigation between tmux panes and vim splits
 
 " Language related
 Plugin 'klen/python-mode' "Helps you to create python code very quickly
-Plugin 'davidhalter/jedi-vim' "Python autocompletion with VIM
+Plugin 'davidhalter/jedi-vim' "Python autocompletion with Vim
 Plugin 'majutsushi/tagbar' "Displays tags in a window, ordered by scope
 Plugin 'mzlogin/vim-markdown-toc' "Generate markdown TOC
-Plugin 'avakhov/vim-yaml' "Dumb-smart indentation for Yaml
 " If file type not detected:
 " :set ft=ansible
 " Or set something like this in ~/.vimrc.local
-" au BufRead,BufNewFile */playbooks/*.yml set filetype=ansible
+" au BufRead,BufNewFile */playbooks/*.yaml set filetype=ansible
 Plugin 'pearofducks/ansible-vim' "Syntax highlighting Ansible's common filetypes
 Plugin 'vim-syntastic/syntastic' "Syntax checking hacks for vim
 
@@ -74,39 +72,32 @@ highlight NonText guifg=#4a4a59
 highlight SpecialKey guifg=#4a4a59
 
 " Font Hack as the default font
+" This only affects graphical vim
 set guifont=Hack\ 9
 set laststatus=2
 
 " Set solarized colour scheme
-
-" (optional) If everything is too bright and high contrast, then uncomment
-" the next 2 lines:
-" loading the solarized colorscheme is silent to prevent error during initial install
+" This expects that your console is running with Solarized palette
+" Loading the solarized colorscheme is silent to prevent error during
+" initial install
 silent! colorscheme solarized
+set background=dark
+" If everything is too bright and high contrast, then uncomment the
+" next 2 lines. It's probably because you're console is not solarized.
 "set term=screen-256color
 "let g:solarized_termcolors=256
-set background=dark
 
-augroup vimrc_autocmds
-    autocmd!
-    " highlight characters past column 80
-    autocmd FileType python highlight Excess ctermbg=DarkGrey guibg=Black
-    autocmd FileType python match Excess /\%80v.*/
-    autocmd FileType python set nowrap
-    augroup END
-
-" vim setup
-" shortcuts for buffers
+" Shortcuts for switching buffers
 nnoremap <C-b> :buffers<CR>:buffer<Space>
 nnoremap bn :bnext<CR>
 nnoremap bp :bprevious<CR>
 nnoremap bc :bdelete<CR>
 nnoremap bC :bdelete!<CR>
-" shortcuts for tabs
+" Shortcuts for switching tabs
 nnoremap tn :tabnext<CR>
 nnoremap tp :tabprevious<CR>
 
-" terminus setup
+" Terminus setup
 let g:TerminusFocusReporting=0
 
 " ctrlp setup
@@ -138,7 +129,7 @@ autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " Ansible setup
-" treat all .yml files as ansible, cause they probably are
+" Treat all .yml files as ansible, cause they probably are
 au BufRead,BufNewFile *.yml set filetype=ansible
 
 " Syntastic setup
@@ -157,10 +148,19 @@ let g:syntastic_python_checkers = ['flake8', 'pyflakes', 'pylint']
 let g:airline#extensions#tabline#enabled = 1
 " Show just the filename
 let g:airline#extensions#tabline#fnamemod = ':t'
-"  Separators can be configured independently for the tabline
+" Separators can be configured independently for the tabline
 let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
 let g:airline#extensions#tabline#enabled = 1
+
+" Python specific settings
+augroup vimrc_autocmds
+    autocmd!
+    " highlight characters past column 80
+    autocmd FileType python highlight Excess ctermbg=DarkGrey guibg=Black
+    autocmd FileType python match Excess /\%80v.*/
+    autocmd FileType python set nowrap
+    augroup END
 
 " Python-mode
 " Activate rope
@@ -211,4 +211,5 @@ let g:pymode_folding = 0
 silent! source ~/.vimrc_overrides
 " New location
 silent! source ~/.vimrc.local
-
+" Disable any plugins
+silent! source ~/.vimrc.local.vundles.disable

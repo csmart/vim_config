@@ -17,6 +17,7 @@ Plugin 'gmarik/vundle'
 " Navigation
 Plugin 'scrooloose/nerdtree' "File system explorer for the Vim editor
 Plugin 'ctrlpvim/ctrlp.vim' "Fuzzy file, buffer, mru, tag, etc finder
+Plugin 'bogado/file-line' "Open a file in a given line, e.g. vim file:20
 
 " Language related
 Plugin 'klen/python-mode' "Helps you to create python code very quickly
@@ -48,19 +49,30 @@ silent! source ~/.vimrc.local.vundles
 call vundle#end()            " required
 filetype plugin indent on    " required
 
-" The rest of your config follows here
+" Solarized theme - set first so it doesn't override other settings
+" Loading the solarized colorscheme is silent to prevent error on install
+silent! colorscheme solarized
+set background=dark
+" This expects that your console is running with 16 colour Solarized palette, so
+" if everything is too bright and high contrast, then uncomment the next 2 lines
+"set term=screen-256color
+"let g:solarized_termcolors=256
 
+" Vim general settings
 syntax enable
+set nowrap
+set formatoptions-=t " Don't auto wrap!
 set incsearch
 set hlsearch
-set sw=4
-set ts=4
-set expandtab
-set textwidth=79
-
-" Set cursor crosshairs (column, line)
-set cul
-"set cuc
+" Default to 4 space tabs
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
+set noexpandtab
+"set textwidth=79
+set cul " Set horizontal bar (line) in cursor crosshairs
+set colorcolumn=81 " 80 characters limit
+highlight ColorColumn ctermbg=Black ctermfg=DarkRed
 
 " Hide buffers instead of closing them
 set hidden
@@ -75,17 +87,6 @@ highlight SpecialKey guifg=#4a4a59
 " This only affects graphical vim
 set guifont=Hack\ 9
 set laststatus=2
-
-" Set solarized colour scheme
-" This expects that your console is running with Solarized palette
-" Loading the solarized colorscheme is silent to prevent error during
-" initial install
-silent! colorscheme solarized
-set background=dark
-" If everything is too bright and high contrast, then uncomment the
-" next 2 lines. It's probably because you're console is not solarized.
-"set term=screen-256color
-"let g:solarized_termcolors=256
 
 " Shortcuts for switching buffers
 nnoremap <C-b> :buffers<CR>:buffer<Space>
@@ -130,13 +131,12 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 
 " Ansible setup
 " Treat all .yml files as ansible, cause they probably are
-au BufRead,BufNewFile *.yml set filetype=ansible
+au BufRead,BufNewFile *.{yaml,yml} set filetype=ansible
 
 " Syntastic setup
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
-
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
@@ -153,14 +153,18 @@ let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
 let g:airline#extensions#tabline#enabled = 1
 
-" Python specific settings
+" Language specific settings
 augroup vimrc_autocmds
     autocmd!
-    " highlight characters past column 80
-    autocmd FileType python highlight Excess ctermbg=DarkGrey guibg=Black
-    autocmd FileType python match Excess /\%80v.*/
-    autocmd FileType python set nowrap
-    augroup END
+    autocmd FileType python set tabstop=4
+    autocmd FileType python set softtabstop=4
+    autocmd FileType python set shiftwidth=4
+    autocmd FileType python set expandtab
+    autocmd FileType yaml set tabstop=2
+    autocmd FileType yaml set softtabstop=2
+    autocmd FileType yaml set shiftwidth=2
+    autocmd FileType yaml set expandtab
+augroup END
 
 " Python-mode
 " Activate rope

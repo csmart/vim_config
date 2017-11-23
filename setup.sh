@@ -28,6 +28,9 @@ finish() {
 }
 trap finish EXIT
 
+# You can override the git mirror by exporting GIT_MIRROR
+GIT_MIRROR="${GIT_MIRROR:-https://github.com}"
+
 # Directory containing the script, so that we can copy other files out
 DIR="$(dirname "$(readlink -f "${0}")")"
 
@@ -41,7 +44,7 @@ if [[ -d "${HOME}/.vim/bundle/vundle/.git" ]]; then
 	cd - >/dev/null )
 else
 	echo "Cloning vundle from GitLab"
-	git clone https://github.com/gmarik/vundle.git "${HOME}/.vim/bundle/vundle" &>/dev/null
+	git clone "${GIT_MIRROR}"/gmarik/vundle.git "${HOME}/.vim/bundle/vundle" &>/dev/null
 fi
 
 # Put our vimrc in place

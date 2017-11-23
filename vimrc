@@ -1,5 +1,5 @@
 " Vim needs a POSIX shell
-if $SHELL =~ 'bin/fish'
+if $SHELL !~ 'bin/bash'
     set shell=/bin/sh
 endif
 
